@@ -1,23 +1,31 @@
 import json
 from ibm_watson import NaturalLanguageUnderstandingV1
 from ibm_cloud_sdk_core.authenticators import IAMAuthenticator
-from ibm_watson.natural_language_understanding_v1 
-    import Features, EntitiesOptions, KeywordsOptions
+from ibm_watson.natural_language_understanding_v1 import Features, EntitiesOptions, KeywordsOptions
 
-authenticator = IAMAuthenticator('{apikey}')
-natural_language_understanding = NaturalLanguageUnderstandingV1(
-    version='2020-08-01',
-    authenticator=authenticator)
+BASE_URL = "https://api.us-east.natural-language-understanding.watson.cloud.ibm.com"
 
-natural_language_understanding.set_service_url('{url}')
+class Sentiment:
+    def __init__(self, file):
+        with open(file) as f:
+          data = json.load(f)
+          self.key = data['apikey']
+          self.url = data["url"]
 
-response = natural_language_understanding.analyze(
-    text='IBM is an American multinational technology company '
-    'headquartered in Armonk, New York, United States, '
-    'with operations in over 170 countries.',
-    features=Features(
-        entities=EntitiesOptions(emotion=True, sentiment=True, limit=2),
-        keywords=KeywordsOptions(emotion=True, sentiment=True,
-                                 limit=2))).get_result()
+        authenticator = IAMAuthenticator(self.key)
+        natural_language_understanding = NaturalLanguageUnderstandingV1(
+            version='2020-08-01',
+            authenticator=authenticator)
 
-print(json.dumps(response, indent=2))
+        natural_language_understanding.set_service_url(self.url)
+        self.analyzer = natural_language_understanding
+        return
+
+    def analyze(self, text):
+        return self.analyzer.analyze(
+            text=text,
+            features=Features(
+                entities=EntitiesOptions(emotion=True, sentiment=True, limit=2),
+                keywords=KeywordsOptions(emotion=True, sentiment=True,
+                                         limit=2))).get_result()
+
