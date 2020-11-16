@@ -22,13 +22,15 @@ class Sentiment:
         return
 
     def analyze(self, text):
+        if text == "empty" or text  == "":
+            return 5.0
+
         response = self.analyzer.analyze(
             text=text,
+            language='en',
             features=Features(sentiment=SentimentOptions(document=True))).get_result()
-
-
         return (float(response["sentiment"]["document"]["score"]) + 1) * 5
 
 # s = Sentiment("apikey.json")
-# res = s.analyze("I love this but you hate it what do you think br")
+# res = s.analyze("")
 # print(res)
