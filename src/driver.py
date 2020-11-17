@@ -5,7 +5,8 @@ from classifier import *
 
 # Driver of the program
 if __name__ == '__main__':
-    topics = ["a", "b", "c", "d"]
+    topics = ["Democrat", "Republic", "Election Fraud", "SCOTUS", "Climate",
+              "Economic", "Foreign Military", "Local Military", "COVID" ]
     if sys.argv[1] == "tweets":
         pass
     elif sys.argv[1] == "dataset":
