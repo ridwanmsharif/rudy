@@ -73,20 +73,19 @@ class Classifier:
     # learn_dt creates a decision tree for the data fed into the  classifier.
     def learn_dt(self):
         self.tree =  self.tree.fit(self.examples, self.labels)
-        return
 
     # predict predicts the political leaning  based on  an example profile.
     def predict(self, example):
-        return  self.tree.predict(example)[0]
+        return self.tree.predict([example])[0]
 
     # get_prediction_accuracy returns the prediction accuracy of the tree on the
     # test set provided.
     def get_prediction_accuracy(self, test_examples, test_labels):
-        total = len(test_set)
+        total = len(test_examples)
         correct = 0
 
         for i, row in enumerate(test_examples):
-            if int(test_labels[i]) == int(self.predict(row)):
+            if test_labels[i] == self.predict(row):
                 correct  += 1
 
         return (correct/total)*100
