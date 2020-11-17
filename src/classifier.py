@@ -48,19 +48,23 @@ def read_data(filepath: str):
 
                 floatRow.append(float(col))
 
-            examples.append(floatRow[:-1])
+            examples.append(floatRow)
 
     return (examples, labels, features, featureIndex)
 
 
 class Classifier:
-    def __init__(self, filepath: str):
-        self.examples, self.labels, self.features, self.featuresIndex = read_data(filepath)
+    def __init__(self, filepath: str, features):
+        self.examples, self.labels, _, self.featuresIndex = read_data(filepath)
         self.tree = tree.DecisionTreeClassifier()
+        self.features = features
+        return
 
     # print_tree prints the tree to a file provided.
     def print_tree(self, path, debug = False):
-        dot_data = tree.export_graphviz(self.tree, out_file=None)
+        dot_data = tree.export_graphviz(self.tree, out_file=None,
+                                        feature_names=self.features,
+                                        class_names=["democrat", "republican"])
         graph = graphviz.Source(dot_data)
         graph.render(path)
         return
