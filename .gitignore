@@ -2,3 +2,5 @@
 *.log
 *.pdf
 src/apikey.json
+src/tweets.csv
+src/pruned_tweets.csv

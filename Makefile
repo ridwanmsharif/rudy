@@ -7,16 +7,17 @@ install:
 	pip install anytree
 	pip install graphviz
 
-dataset:
+test:
 	make install
 	python3 src/driver.py dataset src/input.csv src/output.csv
+
+dataset:
+	make install
+	python3 src/driver.py dataset src/tweets.csv src/output.csv
 
 classify:
 	make install
 	python3 src/driver.py tree src/output.csv src/tree
-
-test:
-	make clean
 
 paper:
 	cd doc && $(MAKE)
