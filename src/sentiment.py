@@ -1,7 +1,7 @@
 import json
 from ibm_watson import NaturalLanguageUnderstandingV1
 from ibm_cloud_sdk_core.authenticators import IAMAuthenticator
-from ibm_watson.natural_language_understanding_v1 import Features, EntitiesOptions, KeywordsOptions
+from ibm_watson.natural_language_understanding_v1 import Features, EntitiesOptions, KeywordsOptions, SentimentOptions
 
 BASE_URL = "https://api.us-east.natural-language-understanding.watson.cloud.ibm.com"
 
@@ -22,10 +22,15 @@ class Sentiment:
         return
 
     def analyze(self, text):
-        return self.analyzer.analyze(
-            text=text,
-            features=Features(
-                entities=EntitiesOptions(emotion=True, sentiment=True, limit=2),
-                keywords=KeywordsOptions(emotion=True, sentiment=True,
-                                         limit=2))).get_result()
+        if text == "empty" or text  == "":
+            return 5.0
 
+        response = self.analyzer.analyze(
+            text=text,
+            language='en',
+            features=Features(sentiment=SentimentOptions(document=True))).get_result()
+        return (float(response["sentiment"]["document"]["score"]) + 1) * 5
+
+# s = Sentiment("apikey.json")
+# res = s.analyze("")
+# print(res)
