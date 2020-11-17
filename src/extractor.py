@@ -3,7 +3,7 @@ import time
 
 from tweets import Tweets
 
-def get_text():
+def get_text(file_path):
     consumer_key = ""
     consumer_secret = ""
     access_key = ""
@@ -14,7 +14,7 @@ def get_text():
     hashtags = set()
     handles = []
 
-    with open("../resources/twitter_handles.csv") as f:
+    with open(file_path) as f:
         header = True
         for line in f:
             if header:
@@ -57,5 +57,5 @@ def get_text():
             count += 1
 
 
-if __name__ == "__main__":
-    get_text()
+# if __name__ == "__main__":
+#     get_text("twitter_handles.csv")
