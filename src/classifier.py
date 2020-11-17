@@ -65,6 +65,7 @@ class Classifier:
         dot_data = tree.export_graphviz(self.tree, out_file=None,
                                         feature_names=self.features,
                                         class_names=["democrat", "republican"])
+
         graph = graphviz.Source(dot_data)
         graph.render(path)
         return
