@@ -28,7 +28,9 @@ if __name__ == '__main__':
             topics, 
             sys.argv[3], 
             sys.argv[4],
-            sys.argv[5])
+            sys.argv[5],
+            sys.argv[6],
+            sys.argv[7])
     else:
         print("unknown command")
         sys.exit(1)

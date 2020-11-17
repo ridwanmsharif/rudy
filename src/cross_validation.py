@@ -130,7 +130,7 @@ class MinSamples(KFold):
         plt.legend(['Training Accuracy', 'Validation Accuracy'])
         fig.savefig(output_path)
 
-def get_graphs(k, depths, samples, topics, examples_path, depth_path, samples_path):
+def get_graphs(k, depths, samples, topics, examples_path, depth_path, samples_path, tree_max_depth_path, tree_min_samples_path):
     def get_best_parameter(test_data):
         best_index, best_value = 0, 0
         for i, v in enumerate(test_data):
@@ -143,10 +143,21 @@ def get_graphs(k, depths, samples, topics, examples_path, depth_path, samples_pa
     train, test = md.cross_validate()
     index, val = get_best_parameter(test)
     print("Best Max Depth", index + 1, val)
+    max_depth = index + 1
     md.plot(train, test, depth_path)
 
     ms = MinSamples(k, [i for i in range(2, 41)], examples_path, topics)
     train, test = ms.cross_validate()
     index, val = get_best_parameter(test)
     print("Best Min Samples Split", index + 2, val)
+    min_samples = index + 2
     ms.plot(train, test, samples_path)
+
+    classifier = Classifier(examples_path, topics)
+    classifier.tree = dt.DecisionTreeClassifier(max_depth=max_depth)
+    classifier.learn_dt()
+    classifier.print_tree(tree_max_depth_path)
+
+    classifier.tree = dt.DecisionTreeClassifier(min_samples_split=min_samples)
+    classifier.learn_dt()
+    classifier.print_tree(tree_min_samples_path)
