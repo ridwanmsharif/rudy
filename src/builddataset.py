@@ -25,6 +25,8 @@ class Dataset:
                 break
 
             tweeterInfo = info.split(",")
+            assert(len(tweeterInfo) == 3)
+
             tweeterHandle, tweeterLabel = tweeterInfo[0], tweeterInfo[1]
 
 
