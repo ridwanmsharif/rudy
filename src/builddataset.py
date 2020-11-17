@@ -3,8 +3,9 @@ import time
 import sys, os, csv
 
 class Dataset:
-    def __init__(self, topics):
+    def __init__(self, topics, keyfile):
         self.topics = topics
+        self.keyfile = keyfile
         self.profiles = dict() # Key: handle, Value: (label, {topic: (total score, count)}
 
     # ingests the data from the input location
@@ -14,7 +15,7 @@ class Dataset:
             sys.exit()
 
 
-        analyzer = Sentiment("apikey.json")
+        analyzer = Sentiment(self.keyfile)
         inputFile = open(filepath, "r")
         while True:
             info = inputFile.readline().strip("\n")
