@@ -19,6 +19,9 @@ classify:
 	make install
 	python3 src/driver.py tree src/output.csv src/tree
 
+cross_validate:
+	python3 src/driver.py cross_validate 5 src/output.csv resources/max_depth.png resources/min_samples.png
+
 paper:
 	cd doc && $(MAKE)
 
