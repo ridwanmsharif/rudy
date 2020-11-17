@@ -16,45 +16,37 @@ class Dataset:
 
 
         analyzer = Sentiment(self.keyfile)
-        inputFile = open(filepath, "r")
-        while True:
-            info = inputFile.readline().strip("\n")
 
-            # if line is empty, end of file is reached
-            if not info:
-                break
+        with open(filepath, "r") as f:
+            for info in f:
+                info = info.strip()
+                data = info.split(",")
 
-            tweeterInfo = info.split(",")
-            assert(len(tweeterInfo) == 3)
+                try:
+                    tweet_index = int(data[0])
+                    if tweet_index not in self.profiles:
+                        self.profiles[tweet_index] = (tweeterLabel, {})
 
-            tweeterHandle, tweeterLabel = tweeterInfo[0], tweeterInfo[1]
+                    text = data[1]
+                    discussedTopics = data[2:]
+                    profileTopicsDict = self.profiles[tweet_index][1]
 
+                    score  = analyzer.analyze(text)
+                    for t in discussedTopics:
+                        if t in profileTopicsDict:
+                            total, count = profileTopicsDict[t]
+                            profileTopicsDict[t] = (total + score,  count + 1)
+                        else:
+                            profileTopicsDict[t] = (score, 1)
 
-            numTweets = int(inputFile.readline().strip("\n"))
-            profileTopicsDict = dict()
-            for i in range(numTweets):
-                data = inputFile.readline().strip("\n").split(",")
-                text = data[0]
-                discussedTopics = data[1:]
+                    # Default value.
+                    for t in self.topics:
+                        if t not in profileTopicsDict:
+                            profileTopicsDict[t] = (5.0, 1)
 
-                score  = analyzer.analyze(text)
-                for t in discussedTopics:
-                    if t in profileTopicsDict:
-                        total, count = profileTopicsDict[t]
-                        profileTopicsDict[t] = (total + score,  count + 1)
-                    else:
-                        profileTopicsDict[t] = (score, 1)
+                except:
+                    tweeterLabel = data[1]
 
-                # Default value.
-                for t in self.topics:
-                    if t not in profileTopicsDict:
-                        profileTopicsDict[t] = (5.0, 1)
-
-            # All the tweets analyzed. Must create a profile for it.
-            self.profiles[tweeterHandle] = (tweeterLabel, profileTopicsDict)
-
-
-        inputFile.close()
         return
 
     # saves the dataset in the output file
@@ -63,6 +55,7 @@ class Dataset:
         line = ",".join(self.topics) + ",party"
         outF.write(line)
         outF.write("\n")
+
         for profile in self.profiles:
             label, scores = self.profiles[profile]
             scoresForTopics = []
