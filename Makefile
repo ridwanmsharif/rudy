@@ -13,7 +13,7 @@ test:
 
 dataset:
 	make install
-	python3 src/driver.py dataset src/tweets.csv src/output.csv
+	python3 src/driver.py dataset src/pruned_tweets.csv src/output.csv
 
 classify:
 	make install
