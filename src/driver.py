@@ -31,6 +31,19 @@ if __name__ == '__main__':
             sys.argv[5],
             sys.argv[6],
             sys.argv[7])
+    elif sys.argv[1] == "predict":
+        classifier = Classifier(sys.argv[2], topics)
+        classifier.learn_dt()
+        classifier.print_tree(sys.argv[3])
+        examples = read_data(sys.argv[4])[0]
+        assert(len(examples) == 1)
+        example = examples[0]
+        res = classifier.predict(example)
+        print()
+        print("###############################")
+        print("The political leaning for the user is:", res)
+        print("###############################")
+        print()
     else:
         print("unknown command")
         sys.exit(1)
