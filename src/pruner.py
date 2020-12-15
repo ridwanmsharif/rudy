@@ -1,6 +1,6 @@
 import re
 
-def prune_tweets():
+def prune_tweets(inputFile, of):
 
     topics = {
         "Democrat": [
@@ -153,8 +153,8 @@ def prune_tweets():
         ]
     }
 
-    with open("../resources/tweets.csv", encoding="utf8") as r:
-        with open("../resources/pruned_tweets.csv", "w") as w:
+    with open(inputFile, encoding="utf8") as r:
+        with open(of, "w") as w:
             identifier = 0
             for index, line in enumerate(r):
                 line = line.strip()
@@ -181,4 +181,4 @@ def prune_tweets():
 
 
 if __name__ == "__main__":
-    prune_tweets()
+    prune_tweets("../resources/tweets.csv", "../resources/pruned_tweets.csv")
